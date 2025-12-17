@@ -81,3 +81,58 @@ If you have any questions, please contact Chongyi Li at lichongyi25@gmail.com or
 ## TensorFlow Version 
 Thanks tuvovan (vovantu.hust@gmail.com) who re-produces our code by TF. The results of TF version look similar with our Pytorch version. But I do not have enough time to check the details.
 https://github.com/tuvovan/Zero_DCE_TF
+
+```python
+# CPU-only Zero-DCE Setup (Updated for your project)
+
+## Quick CPU Setup (No CUDA needed)
+```
+conda create --name zerodce_cpu python=3.9 opencv pytorch torchvision cpuonly -c pytorch
+conda activate zerodce_cpu
+pip install numpy matplotlib
+```
+
+## Folder Structure (Keep it simple)
+```
+your_project/
+├── data/
+│   ├── test_images/     # Your low-light images here
+│   └── train_data/      # Download once
+├── model.py             # Zero-DCE network
+├── cpu_test.py          # CPU test script
+└── snapshots/
+    └── Epoch99.pth      # Pre-trained model
+```
+
+## Test on CPU (2 lines)
+```
+python cpu_test.py
+```
+**Results saved in `data/enhanced/`** - ready for your FastAPI upload!
+
+## Key Changes for CPU:
+```
+✅ No CUDA imports 
+✅ torch.device('cpu') everywhere
+✅ Batch size = 1 (memory safe)
+✅ ~15s per image on average CPU
+✅ Pre-trained model works out-of-box
+```
+
+## Download Pre-trained Model:
+```
+wget https://github.com/Li-Chongyi/Zero-DCE_code/releases/download/1.0/Epoch99.pth
+# Put in snapshots/ folder
+```
+
+## cpu_test.py (Your main script)
+```
+import torch
+device = torch.device('cpu')  # CPU only
+model = torch.load('snapshots/Epoch99.pth', map_location=device)
+# Processes your uploaded images instantly
+```
+
+**Perfect for Fast Mode** - runs on any server, no GPU hassle! 🚀
+
+[1](https://li-chongyi.github.io/Proj_Zero-DCE.html)
